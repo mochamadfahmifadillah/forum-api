@@ -11,7 +11,7 @@
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
     "migrate": "node-pg-migrate",
-    "migrate:test": "node-pg-migrate --envPath .test.env",
+    "migrate:test": "node-pg-migrate up --envPath .test.env",
     "lint": "eslint ./"
   },
   "keywords": [],
