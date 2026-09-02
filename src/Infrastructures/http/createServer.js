@@ -1,32 +1,59 @@
 import express from 'express';
+
 import ClientError from '../../Commons/exceptions/ClientError.js';
 import DomainErrorTranslator from '../../Commons/exceptions/DomainErrorTranslator.js';
 
 import users from '../../Interfaces/http/api/users/index.js';
 import authentications from '../../Interfaces/http/api/authentications/index.js';
 import threads from '../../Interfaces/http/api/threads/index.js';
+import comments from '../../Interfaces/http/api/comments/index.js';
+import replies from '../../Interfaces/http/api/replies/index.js';
 
 import authentication from '../../Interfaces/http/middleware/authentication.js';
 
 const createServer = async (container) => {
   const app = express();
 
+  // ============================================================
   // Middleware
+  // ============================================================
+
   app.use(express.json());
 
   const authenticationMiddleware = authentication(container);
 
+  // ============================================================
   // Routes
+  // ============================================================
+
+  // User routes
   app.use('/users', users(container));
 
+  // Authentication routes
   app.use('/authentications', authentications(container));
 
+  // Thread routes
   app.use(
     '/threads',
     threads(container, authenticationMiddleware),
   );
 
+  // Comment routes
+  app.use(
+    '/threads/:threadId/comments',
+    comments(container, authenticationMiddleware),
+  );
+
+  // Reply routes
+  app.use(
+    '/threads/:threadId/comments/:commentId/replies',
+    replies(container, authenticationMiddleware),
+  );
+
+  // ============================================================
   // Global Error Handler
+  // ============================================================
+
   app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
     const translatedError = DomainErrorTranslator.translate(error);
 
@@ -43,7 +70,10 @@ const createServer = async (container) => {
     });
   });
 
+  // ============================================================
   // 404 Handler
+  // ============================================================
+
   app.use((req, res) => {
     res.status(404).json({
       status: 'fail',

@@ -1,5 +1,5 @@
-import UserLogin from '../../Domains/users/entities/UserLogin.js';
-import NewAuthentication from '../../Domains/authentications/entities/NewAuth.js';
+import UserLogin from "../../Domains/users/entities/UserLogin.js";
+import NewAuthentication from "../../Domains/authentications/entities/NewAuth.js";
 
 class LoginUserUseCase {
   constructor({
