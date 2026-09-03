@@ -14,7 +14,7 @@ class ToggleCommentLikeUseCase {
     const comment = comments.find((item) => item.id === commentId);
 
     if (!comment) {
-      throw new Error("COMMENT.NOT_FOUND");
+      throw new Error('COMMENT.NOT_FOUND');
     }
 
     return this._commentLikeRepository.toggleLike(username, commentId);

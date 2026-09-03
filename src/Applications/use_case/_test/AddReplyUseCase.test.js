@@ -1,22 +1,23 @@
-import { describe, it, expect, vi } from "vitest";
-import AddReplyUseCase from "../AddReplyUseCase.js";
+import { describe, it, expect, vi } from 'vitest';
+import AddReplyUseCase from '../AddReplyUseCase.js';
 
-describe("AddReplyUseCase", () => {
-  it("should orchestrate the add reply action correctly", async () => {
+describe('AddReplyUseCase', () => {
+  it('should orchestrate the add reply action correctly', async () => {
     // Arrange
-    const owner = "dicoding";
-    const threadId = "thread-123";
-    const commentId = "comment-123";
+    const owner = 'dicoding';
+    const threadId = 'thread-123';
+    const commentId = 'comment-123';
 
     const useCasePayload = {
-      content: "Sebuah balasan",
+      content: 'Sebuah balasan',
     };
 
     const expectedAddedReply = {
-      id: "reply-123",
-      content: "Sebuah balasan",
-      username: "dicoding",
-      comment_id: "comment-123",
+      id: 'reply-123',
+      content: 'Sebuah balasan',
+      username: 'dicoding',
+      // eslint-disable-next-line camelcase
+      comment_id: 'comment-123',
     };
 
     const threadRepository = {
@@ -27,9 +28,9 @@ describe("AddReplyUseCase", () => {
       getCommentsByThreadId: vi.fn(() =>
         Promise.resolve([
           {
-            id: "comment-123",
-            username: "user",
-            content: "Sebuah komentar",
+            id: 'comment-123',
+            username: 'user',
+            content: 'Sebuah komentar',
           },
         ]),
       ),
@@ -71,7 +72,7 @@ describe("AddReplyUseCase", () => {
     expect(replyRepository.addReply).toHaveBeenCalledTimes(1);
   });
 
-  it("should throw error when content is missing", async () => {
+  it('should throw error when content is missing', async () => {
     // Arrange
     const addReplyUseCase = new AddReplyUseCase({
       replyRepository: {},
@@ -81,11 +82,11 @@ describe("AddReplyUseCase", () => {
 
     // Action & Assert
     await expect(
-      addReplyUseCase.execute("dicoding", "thread-123", "comment-123", {}),
-    ).rejects.toThrowError("REPLY.NOT_CONTAIN_NEEDED_PROPERTY");
+      addReplyUseCase.execute('dicoding', 'thread-123', 'comment-123', {}),
+    ).rejects.toThrowError('REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
-  it("should throw error when content has invalid data type", async () => {
+  it('should throw error when use case payload is undefined', async () => {
     // Arrange
     const addReplyUseCase = new AddReplyUseCase({
       replyRepository: {},
@@ -95,13 +96,32 @@ describe("AddReplyUseCase", () => {
 
     // Action & Assert
     await expect(
-      addReplyUseCase.execute("dicoding", "thread-123", "comment-123", {
+      addReplyUseCase.execute(
+        'dicoding',
+        'thread-123',
+        'comment-123',
+        undefined,
+      ),
+    ).rejects.toThrowError('REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
+  });
+
+  it('should throw error when content has invalid data type', async () => {
+    // Arrange
+    const addReplyUseCase = new AddReplyUseCase({
+      replyRepository: {},
+      commentRepository: {},
+      threadRepository: {},
+    });
+
+    // Action & Assert
+    await expect(
+      addReplyUseCase.execute('dicoding', 'thread-123', 'comment-123', {
         content: 123,
       }),
-    ).rejects.toThrowError("REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION");
+    ).rejects.toThrowError('REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
   });
 
-  it("should throw error when comment is not found", async () => {
+  it('should throw error when comment is not found', async () => {
     // Arrange
     const threadRepository = {
       getThreadById: vi.fn(() => Promise.resolve()),
@@ -123,10 +143,10 @@ describe("AddReplyUseCase", () => {
 
     // Action & Assert
     await expect(
-      addReplyUseCase.execute("dicoding", "thread-123", "comment-999", {
-        content: "Sebuah balasan",
+      addReplyUseCase.execute('dicoding', 'thread-123', 'comment-999', {
+        content: 'Sebuah balasan',
       }),
-    ).rejects.toThrowError("COMMENT.NOT_FOUND");
+    ).rejects.toThrowError('COMMENT.NOT_FOUND');
 
     expect(replyRepository.addReply).not.toHaveBeenCalled();
   });

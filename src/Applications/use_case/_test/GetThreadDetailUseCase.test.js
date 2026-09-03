@@ -1,49 +1,49 @@
-import { describe, it, expect, vi } from "vitest";
-import GetThreadDetailUseCase from "../GetThreadDetailUseCase.js";
+import { describe, it, expect, vi } from 'vitest';
+import GetThreadDetailUseCase from '../GetThreadDetailUseCase.js';
 
-describe("GetThreadDetailUseCase", () => {
-  it("should orchestrate the get thread detail action correctly", async () => {
+describe('GetThreadDetailUseCase', () => {
+  it('should orchestrate the get thread detail action correctly', async () => {
     // Arrange
-    const threadId = "thread-123";
+    const threadId = 'thread-123';
 
     const expectedThread = {
-      id: "thread-123",
-      title: "Sebuah thread",
-      body: "Sebuah body thread",
+      id: 'thread-123',
+      title: 'Sebuah thread',
+      body: 'Sebuah body thread',
       date: new Date().toISOString(),
-      username: "dicoding",
+      username: 'dicoding',
     };
 
     const comments = [
       {
-        id: "comment-123",
-        username: "user1",
+        id: 'comment-123',
+        username: 'user1',
         date: new Date().toISOString(),
-        content: "Sebuah komentar",
+        content: 'Sebuah komentar',
       },
       {
-        id: "comment-456",
-        username: "user2",
+        id: 'comment-456',
+        username: 'user2',
         date: new Date().toISOString(),
-        content: "Komentar lainnya",
+        content: 'Komentar lainnya',
       },
     ];
 
     const repliesComment123 = [
       {
-        id: "reply-123",
-        username: "user2",
+        id: 'reply-123',
+        username: 'user2',
         date: new Date().toISOString(),
-        content: "Sebuah balasan",
+        content: 'Sebuah balasan',
       },
     ];
 
     const repliesComment456 = [
       {
-        id: "reply-456",
-        username: "user1",
+        id: 'reply-456',
+        username: 'user1',
         date: new Date().toISOString(),
-        content: "Balasan lainnya",
+        content: 'Balasan lainnya',
       },
     ];
 
@@ -57,7 +57,7 @@ describe("GetThreadDetailUseCase", () => {
 
     const replyRepository = {
       getRepliesByCommentId: vi.fn((commentId) => {
-        if (commentId === "comment-123") {
+        if (commentId === 'comment-123') {
           return Promise.resolve(repliesComment123);
         }
 
@@ -67,7 +67,7 @@ describe("GetThreadDetailUseCase", () => {
 
     const commentLikeRepository = {
       getLikeCountByCommentId: vi.fn((commentId) => {
-        if (commentId === "comment-123") {
+        if (commentId === 'comment-123') {
           return Promise.resolve(3);
         }
 
@@ -119,21 +119,21 @@ describe("GetThreadDetailUseCase", () => {
     );
 
     expect(replyRepository.getRepliesByCommentId).toHaveBeenCalledWith(
-      "comment-123",
+      'comment-123',
     );
 
     expect(replyRepository.getRepliesByCommentId).toHaveBeenCalledWith(
-      "comment-456",
+      'comment-456',
     );
 
     expect(replyRepository.getRepliesByCommentId).toHaveBeenCalledTimes(2);
 
     expect(commentLikeRepository.getLikeCountByCommentId).toHaveBeenCalledWith(
-      "comment-123",
+      'comment-123',
     );
 
     expect(commentLikeRepository.getLikeCountByCommentId).toHaveBeenCalledWith(
-      "comment-456",
+      'comment-456',
     );
 
     expect(commentLikeRepository.getLikeCountByCommentId).toHaveBeenCalledTimes(
@@ -141,18 +141,18 @@ describe("GetThreadDetailUseCase", () => {
     );
   });
 
-  it("should return thread detail with empty comments", async () => {
+  it('should return thread detail with empty comments', async () => {
     // Arrange
-    const threadId = "thread-123";
+    const threadId = 'thread-123';
 
     const threadRepository = {
       getThreadById: vi.fn(() =>
         Promise.resolve({
-          id: "thread-123",
-          title: "Sebuah thread",
-          body: "Sebuah body thread",
+          id: 'thread-123',
+          title: 'Sebuah thread',
+          body: 'Sebuah body thread',
           date: new Date().toISOString(),
-          username: "dicoding",
+          username: 'dicoding',
         }),
       ),
     };

@@ -1,7 +1,7 @@
-import AddCommentUseCase from "../../../../Applications/use_case/AddCommentUseCase.js";
-import DeleteCommentUseCase from "../../../../Applications/use_case/DeleteCommentUseCase.js";
-import DeleteReplyUseCase from "../../../../Applications/use_case/DeleteReplyUseCase.js";
-import ToggleCommentLikeUseCase from "../../../../Applications/use_case/ToggleCommentLikeUseCase.js";
+import AddCommentUseCase from '../../../../Applications/use_case/AddCommentUseCase.js';
+import DeleteCommentUseCase from '../../../../Applications/use_case/DeleteCommentUseCase.js';
+import DeleteReplyUseCase from '../../../../Applications/use_case/DeleteReplyUseCase.js';
+import ToggleCommentLikeUseCase from '../../../../Applications/use_case/ToggleCommentLikeUseCase.js';
 
 class CommentsHandler {
   constructor(container) {
@@ -28,7 +28,7 @@ class CommentsHandler {
       );
 
       res.status(201).json({
-        status: "success",
+        status: 'success',
         data: {
           addedComment: {
             id: addedComment.id,
@@ -53,8 +53,8 @@ class CommentsHandler {
       await deleteCommentUseCase.execute(req.params.commentId, username);
 
       res.status(200).json({
-        status: "success",
-        message: "komentar berhasil dihapus",
+        status: 'success',
+        message: 'komentar berhasil dihapus',
       });
     } catch (error) {
       next(error);
@@ -72,8 +72,8 @@ class CommentsHandler {
       await deleteReplyUseCase.execute(req.params.replyId, username);
 
       res.status(200).json({
-        status: "success",
-        message: "balasan berhasil dihapus",
+        status: 'success',
+        message: 'balasan berhasil dihapus',
       });
     } catch (error) {
       next(error);
@@ -92,7 +92,7 @@ class CommentsHandler {
       await toggleCommentLikeUseCase.execute(username, threadId, commentId);
 
       return res.status(200).json({
-        status: "success",
+        status: 'success',
       });
     } catch (error) {
       return next(error);

@@ -1,4 +1,4 @@
-import CommentLikeRepository from "../../Domains/comments/CommentLikeRepository.js";
+import CommentLikeRepository from '../../Domains/comments/CommentLikeRepository.js';
 
 class CommentLikeRepositoryPostgres extends CommentLikeRepository {
   constructor(pool) {

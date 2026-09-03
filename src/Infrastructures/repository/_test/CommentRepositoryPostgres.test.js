@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, afterAll, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterAll, vi } from 'vitest';
 
-import CommentRepositoryPostgres from "../CommentRepositoryPostgres.js";
+import CommentRepositoryPostgres from '../CommentRepositoryPostgres.js';
 
-describe("CommentRepositoryPostgres", () => {
+describe('CommentRepositoryPostgres', () => {
   let pool;
   let idGenerator;
   let commentRepositoryPostgres;
@@ -12,7 +12,7 @@ describe("CommentRepositoryPostgres", () => {
       query: vi.fn(),
     };
 
-    idGenerator = vi.fn(() => "123");
+    idGenerator = vi.fn(() => '123');
 
     commentRepositoryPostgres = new CommentRepositoryPostgres(
       pool,
@@ -24,23 +24,24 @@ describe("CommentRepositoryPostgres", () => {
     vi.restoreAllMocks();
   });
 
-  it("should persist new comment", async () => {
+  it('should persist new comment', async () => {
     // Arrange
-    const threadId = "thread-123";
-    const username = "dicoding";
+    const threadId = 'thread-123';
+    const username = 'dicoding';
 
     const payload = {
-      content: "Sebuah komentar",
+      content: 'Sebuah komentar',
     };
 
     pool.query.mockResolvedValue({
       rows: [
         {
-          id: "comment-123",
-          content: "Sebuah komentar",
+          id: 'comment-123',
+          content: 'Sebuah komentar',
           date: new Date().toISOString(),
-          username: "dicoding",
-          thread_id: "thread-123",
+          username: 'dicoding',
+          // eslint-disable-next-line camelcase
+          thread_id: 'thread-123',
         },
       ],
     });
@@ -57,20 +58,20 @@ describe("CommentRepositoryPostgres", () => {
 
     expect(pool.query).toHaveBeenCalledWith(
       expect.objectContaining({
-        values: ["comment-123", payload.content, username, threadId],
+        values: ['comment-123', payload.content, username, threadId],
       }),
     );
 
-    expect(addedComment.id).toBe("comment-123");
+    expect(addedComment.id).toBe('comment-123');
     expect(addedComment.content).toBe(payload.content);
     expect(addedComment.username).toBe(username);
     expect(addedComment.threadId).toBe(threadId);
   });
 
-  it("should delete comment when owner is correct", async () => {
+  it('should delete comment when owner is correct', async () => {
     // Arrange
-    const commentId = "comment-123";
-    const owner = "dicoding";
+    const commentId = 'comment-123';
+    const owner = 'dicoding';
 
     pool.query
       .mockResolvedValueOnce({
@@ -106,9 +107,9 @@ describe("CommentRepositoryPostgres", () => {
     );
   });
 
-  it("should throw error when comment is not found", async () => {
+  it('should throw error when comment is not found', async () => {
     // Arrange
-    const commentId = "comment-123";
+    const commentId = 'comment-123';
 
     pool.query.mockResolvedValue({
       rows: [],
@@ -116,49 +117,49 @@ describe("CommentRepositoryPostgres", () => {
 
     // Action & Assert
     await expect(
-      commentRepositoryPostgres.deleteComment(commentId, "dicoding"),
-    ).rejects.toThrowError("COMMENT.NOT_FOUND");
+      commentRepositoryPostgres.deleteComment(commentId, 'dicoding'),
+    ).rejects.toThrowError('COMMENT.NOT_FOUND');
 
     expect(pool.query).toHaveBeenCalledTimes(1);
   });
 
-  it("should throw error when user is not the comment owner", async () => {
+  it('should throw error when user is not the comment owner', async () => {
     // Arrange
-    const commentId = "comment-123";
+    const commentId = 'comment-123';
 
     pool.query.mockResolvedValue({
       rows: [
         {
           id: commentId,
-          username: "owner",
+          username: 'owner',
         },
       ],
     });
 
     // Action & Assert
     await expect(
-      commentRepositoryPostgres.deleteComment(commentId, "another-user"),
-    ).rejects.toThrowError("COMMENT.NOT_AUTHORIZED");
+      commentRepositoryPostgres.deleteComment(commentId, 'another-user'),
+    ).rejects.toThrowError('COMMENT.NOT_AUTHORIZED');
 
     expect(pool.query).toHaveBeenCalledTimes(1);
   });
 
-  it("should return comments by thread id", async () => {
+  it('should return comments by thread id', async () => {
     // Arrange
-    const threadId = "thread-123";
+    const threadId = 'thread-123';
 
     const expectedComments = [
       {
-        id: "comment-123",
-        content: "Komentar pertama",
+        id: 'comment-123',
+        content: 'Komentar pertama',
         date: new Date().toISOString(),
-        username: "dicoding",
+        username: 'dicoding',
       },
       {
-        id: "comment-456",
-        content: "Komentar kedua",
+        id: 'comment-456',
+        content: 'Komentar kedua',
         date: new Date().toISOString(),
-        username: "user",
+        username: 'user',
       },
     ];
 

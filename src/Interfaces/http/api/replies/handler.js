@@ -1,4 +1,4 @@
-import AddReplyUseCase from "../../../../Applications/use_case/AddReplyUseCase.js";
+import AddReplyUseCase from '../../../../Applications/use_case/AddReplyUseCase.js';
 
 class RepliesHandler {
   constructor(container) {
@@ -22,7 +22,7 @@ class RepliesHandler {
       );
 
       return res.status(201).json({
-        status: "success",
+        status: 'success',
         data: {
           addedReply: {
             id: addedReply.id,

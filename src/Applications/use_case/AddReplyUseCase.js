@@ -9,11 +9,11 @@ class AddReplyUseCase {
     const { content } = useCasePayload || {};
 
     if (!content) {
-      throw new Error("REPLY.NOT_CONTAIN_NEEDED_PROPERTY");
+      throw new Error('REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    if (typeof content !== "string") {
-      throw new Error("REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION");
+    if (typeof content !== 'string') {
+      throw new Error('REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
 
     await this._threadRepository.getThreadById(threadId);
@@ -24,7 +24,7 @@ class AddReplyUseCase {
     const comment = comments.find((item) => item.id === commentId);
 
     if (!comment) {
-      throw new Error("COMMENT.NOT_FOUND");
+      throw new Error('COMMENT.NOT_FOUND');
     }
 
     return this._replyRepository.addReply(owner, commentId, useCasePayload);

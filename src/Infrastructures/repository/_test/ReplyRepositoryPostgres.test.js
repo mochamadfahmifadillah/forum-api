@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, afterAll, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterAll, vi } from 'vitest';
 
-import ReplyRepositoryPostgres from "../ReplyRepositoryPostgres.js";
+import ReplyRepositoryPostgres from '../ReplyRepositoryPostgres.js';
 
-describe("ReplyRepositoryPostgres", () => {
+describe('ReplyRepositoryPostgres', () => {
   let pool;
   let idGenerator;
   let replyRepositoryPostgres;
@@ -12,7 +12,7 @@ describe("ReplyRepositoryPostgres", () => {
       query: vi.fn(),
     };
 
-    idGenerator = vi.fn(() => "123");
+    idGenerator = vi.fn(() => '123');
 
     replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, idGenerator);
   });
@@ -21,23 +21,24 @@ describe("ReplyRepositoryPostgres", () => {
     vi.restoreAllMocks();
   });
 
-  it("should persist new reply", async () => {
+  it('should persist new reply', async () => {
     // Arrange
-    const owner = "dicoding";
-    const commentId = "comment-123";
+    const owner = 'dicoding';
+    const commentId = 'comment-123';
 
     const payload = {
-      content: "Sebuah balasan",
+      content: 'Sebuah balasan',
     };
 
     pool.query.mockResolvedValue({
       rows: [
         {
-          id: "reply-123",
-          content: "Sebuah balasan",
+          id: 'reply-123',
+          content: 'Sebuah balasan',
           date: new Date().toISOString(),
-          username: "dicoding",
-          comment_id: "comment-123",
+          username: 'dicoding',
+          // eslint-disable-next-line camelcase
+          comment_id: 'comment-123',
         },
       ],
     });
@@ -54,23 +55,24 @@ describe("ReplyRepositoryPostgres", () => {
 
     expect(pool.query).toHaveBeenCalledWith(
       expect.objectContaining({
-        values: ["reply-123", payload.content, owner, commentId],
+        values: ['reply-123', payload.content, owner, commentId],
       }),
     );
 
     expect(addedReply).toStrictEqual({
-      id: "reply-123",
-      content: "Sebuah balasan",
+      id: 'reply-123',
+      content: 'Sebuah balasan',
       date: expect.any(String),
       username: owner,
+      // eslint-disable-next-line camelcase
       comment_id: commentId,
     });
   });
 
-  it("should delete reply when owner is correct", async () => {
+  it('should delete reply when owner is correct', async () => {
     // Arrange
-    const replyId = "reply-123";
-    const owner = "dicoding";
+    const replyId = 'reply-123';
+    const owner = 'dicoding';
 
     pool.query
       .mockResolvedValueOnce({
@@ -106,9 +108,9 @@ describe("ReplyRepositoryPostgres", () => {
     );
   });
 
-  it("should throw error when reply is not found", async () => {
+  it('should throw error when reply is not found', async () => {
     // Arrange
-    const replyId = "reply-123";
+    const replyId = 'reply-123';
 
     pool.query.mockResolvedValue({
       rows: [],
@@ -116,49 +118,49 @@ describe("ReplyRepositoryPostgres", () => {
 
     // Action & Assert
     await expect(
-      replyRepositoryPostgres.deleteReply(replyId, "dicoding"),
-    ).rejects.toThrowError("REPLY.NOT_FOUND");
+      replyRepositoryPostgres.deleteReply(replyId, 'dicoding'),
+    ).rejects.toThrowError('REPLY.NOT_FOUND');
 
     expect(pool.query).toHaveBeenCalledTimes(1);
   });
 
-  it("should throw error when user is not the reply owner", async () => {
+  it('should throw error when user is not the reply owner', async () => {
     // Arrange
-    const replyId = "reply-123";
+    const replyId = 'reply-123';
 
     pool.query.mockResolvedValue({
       rows: [
         {
           id: replyId,
-          username: "owner",
+          username: 'owner',
         },
       ],
     });
 
     // Action & Assert
     await expect(
-      replyRepositoryPostgres.deleteReply(replyId, "another-user"),
-    ).rejects.toThrowError("REPLY.NOT_AUTHORIZED");
+      replyRepositoryPostgres.deleteReply(replyId, 'another-user'),
+    ).rejects.toThrowError('REPLY.NOT_AUTHORIZED');
 
     expect(pool.query).toHaveBeenCalledTimes(1);
   });
 
-  it("should return replies by comment id", async () => {
+  it('should return replies by comment id', async () => {
     // Arrange
-    const commentId = "comment-123";
+    const commentId = 'comment-123';
 
     const expectedReplies = [
       {
-        id: "reply-123",
-        content: "Balasan pertama",
+        id: 'reply-123',
+        content: 'Balasan pertama',
         date: new Date().toISOString(),
-        username: "dicoding",
+        username: 'dicoding',
       },
       {
-        id: "reply-456",
-        content: "Balasan kedua",
+        id: 'reply-456',
+        content: 'Balasan kedua',
         date: new Date().toISOString(),
-        username: "user",
+        username: 'user',
       },
     ];
 

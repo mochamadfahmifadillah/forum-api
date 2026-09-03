@@ -1,21 +1,21 @@
-import { describe, it, expect, vi } from "vitest";
-import AddThreadUseCase from "../AddThreadUseCase.js";
+import { describe, it, expect, vi } from 'vitest';
+import AddThreadUseCase from '../AddThreadUseCase.js';
 
-describe("AddThreadUseCase", () => {
-  it("should orchestrate the add thread action correctly", async () => {
+describe('AddThreadUseCase', () => {
+  it('should orchestrate the add thread action correctly', async () => {
     // Arrange
     const useCasePayload = {
-      title: "Sebuah thread",
-      body: "Sebuah body thread",
+      title: 'Sebuah thread',
+      body: 'Sebuah body thread',
     };
 
-    const owner = "user-123";
+    const owner = 'user-123';
 
     const expectedAddedThread = {
-      id: "thread-123",
-      title: "Sebuah thread",
-      body: "Sebuah body thread",
-      owner: "user-123",
+      id: 'thread-123',
+      title: 'Sebuah thread',
+      body: 'Sebuah body thread',
+      owner: 'user-123',
     };
 
     const threadRepository = {
@@ -40,7 +40,7 @@ describe("AddThreadUseCase", () => {
     expect(threadRepository.addThread).toHaveBeenCalledTimes(1);
   });
 
-  it("should throw error when payload is not provided", async () => {
+  it('should throw error when payload is not provided', async () => {
     // Arrange
     const threadRepository = {
       addThread: vi.fn(),
@@ -51,14 +51,14 @@ describe("AddThreadUseCase", () => {
     });
 
     // Action & Assert
-    await expect(addThreadUseCase.execute("user-123")).rejects.toThrow(
-      "THREAD.NOT_CONTAIN_NEEDED_PROPERTY",
+    await expect(addThreadUseCase.execute('user-123')).rejects.toThrow(
+      'THREAD.NOT_CONTAIN_NEEDED_PROPERTY',
     );
 
     expect(threadRepository.addThread).not.toHaveBeenCalled();
   });
 
-  it("should throw error when payload does not contain needed property", async () => {
+  it('should throw error when payload does not contain needed property', async () => {
     // Arrange
     const threadRepository = {
       addThread: vi.fn(),
@@ -69,18 +69,18 @@ describe("AddThreadUseCase", () => {
     });
 
     const payloadWithoutTitle = {
-      body: "Sebuah body thread",
+      body: 'Sebuah body thread',
     };
 
     // Action & Assert
     await expect(
-      addThreadUseCase.execute("user-123", payloadWithoutTitle),
-    ).rejects.toThrow("THREAD.NOT_CONTAIN_NEEDED_PROPERTY");
+      addThreadUseCase.execute('user-123', payloadWithoutTitle),
+    ).rejects.toThrow('THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
 
     expect(threadRepository.addThread).not.toHaveBeenCalled();
   });
 
-  it("should throw error when payload property has invalid data type", async () => {
+  it('should throw error when payload property has invalid data type', async () => {
     // Arrange
     const threadRepository = {
       addThread: vi.fn(),
@@ -92,13 +92,13 @@ describe("AddThreadUseCase", () => {
 
     const invalidPayload = {
       title: 123,
-      body: "Sebuah body thread",
+      body: 'Sebuah body thread',
     };
 
     // Action & Assert
     await expect(
-      addThreadUseCase.execute("user-123", invalidPayload),
-    ).rejects.toThrow("THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION");
+      addThreadUseCase.execute('user-123', invalidPayload),
+    ).rejects.toThrow('THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
 
     expect(threadRepository.addThread).not.toHaveBeenCalled();
   });

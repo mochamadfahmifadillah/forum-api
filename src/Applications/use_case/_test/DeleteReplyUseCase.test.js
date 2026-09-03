@@ -1,11 +1,11 @@
-import { describe, it, expect, vi } from "vitest";
-import DeleteReplyUseCase from "../DeleteReplyUseCase.js";
+import { describe, it, expect, vi } from 'vitest';
+import DeleteReplyUseCase from '../DeleteReplyUseCase.js';
 
-describe("DeleteReplyUseCase", () => {
-  it("should orchestrate the delete reply action correctly", async () => {
+describe('DeleteReplyUseCase', () => {
+  it('should orchestrate the delete reply action correctly', async () => {
     // Arrange
-    const replyId = "reply-123";
-    const owner = "dicoding";
+    const replyId = 'reply-123';
+    const owner = 'dicoding';
 
     const replyRepository = {
       deleteReply: vi.fn(() => Promise.resolve()),
